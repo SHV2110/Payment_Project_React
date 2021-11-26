@@ -4,14 +4,13 @@ import { useState } from 'react'
 import GetBank from './GetBank'
 import GetCustomer from './GetCustomer'
 
-
 const Form = (props) =>{
     console.log('Form component called')
 
     const [customer,setCustomer]=useState({customerID: '', name: '', clearBalance: 0, overdraft: ''})
     const [status,setStatus]=useState(0)
     const [bank,setBank]=useState({bic: '', bankName: ''})// useState("")
-    const [bstatus,setBstatus]=useState(0)
+    const [acntnostatus,setacntnostatus]=useState(0)
     const [transaction,setTransaction]=useState({
       amount:0,
       rec_name:"",
@@ -39,6 +38,7 @@ const Form = (props) =>{
     console.log(e.target.value.length)
     setStatus(e.target.value.length)
     if (e.target.value.length===14){
+     
       axios.get(`http://localhost:8080/customers/${e.target.value}`)
       .then((response) => {console.log(response.status)
       setCustomer(response.data)
@@ -58,7 +58,7 @@ const Form = (props) =>{
       
        //   setVal(e.target.value)
       console.log(e.target.value.length)
-      setBstatus(e.target.value.length)
+      setacntnostatus(e.target.value.length)
       if (e.target.value.length===11){
         axios.get(`http://localhost:8080/bank/${e.target.value}`)
         .then((response) => {
@@ -72,7 +72,7 @@ const Form = (props) =>{
        
         console.log(`length--${e.target.value.length}`)
       }
-        console.log(bstatus)
+        console.log(acntnostatus)
         
         
           
@@ -86,7 +86,7 @@ const Form = (props) =>{
       
     
         return <div className="row" >
-                   <div style={{borderWidth:2,borderColor:"#FF0000",borderStyle:"solid",padding:50}}>
+                   <div style={{borderWidth:2,borderColor:"#206466",borderStyle:"solid",padding:50}}>
                          
                     <div className="col-6" >
                     <form className="row g-3">
@@ -107,7 +107,7 @@ const Form = (props) =>{
                                                <h4 style={{marginBottom:20}}>Transfer To</h4>
                                                <label for="BIC" className="form-label">BIC</label>
                                                <input type="text" className="form-control" id="BIC" placeholder="enter BIC" onChange={bankIDHandler}/>
-                                               <div><GetBank bstatus={bstatus} bank={bank}/></div>
+                                               <div><GetBank acntnostatus={acntnostatus} bank={bank}/></div>
                                 </div>
                                 <div className="mb-3">
                                                <label for="BIC" className="form-label">Name</label>

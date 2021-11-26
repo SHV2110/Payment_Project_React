@@ -4,17 +4,20 @@ import Header from './Components/Header'
 import GetCustomer from './Components/GetCustomer'
 import Transaction from './Components/Transaction'
 import Routes from './Routes.js'
+import GetRoutes from './Routes.js'
+
 
 function App() {
+
 
 
   return (
   
     <div>
-     <Routes/>
   
-     
+     <GetRoutes/>
     </div>
   )
 }
+
 export default App;
