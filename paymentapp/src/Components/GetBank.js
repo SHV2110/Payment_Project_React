@@ -1,10 +1,8 @@
 import React from 'react'
-
 const GetBank=(props)=>
 {
     console.log("GetBank Component called")
     console.log('${props.bank.bic} ...... ${props.bank.bankname}')
-
     const message= <div>
         <table class="table">
   <thead>
@@ -25,7 +23,6 @@ const GetBank=(props)=>
   </tbody>
 </table>
     </div>
-
     console.log(props.acntnostatus)
     if(props.acntnostatus===11){
         return <div>{message}</div>
@@ -33,7 +30,5 @@ const GetBank=(props)=>
     else{
         return <div></div>
     }
-
 }
-
 export default GetBank
