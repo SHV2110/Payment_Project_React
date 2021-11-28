@@ -7,6 +7,8 @@ import Navbar from './Components/Navbar.js'
 import TransactionHistory from './Components/TransactionHistory.js'
 import {Routes,Route,Link} from 'react-router-dom'
 import Logout from './Components/Logout'
+import './index.css'
+import Login from './Components/Login.js'
 
 function App() {
 
@@ -14,7 +16,8 @@ function App() {
   <Navbar  />
   <br/>
 <Routes>
-    <Route path="/" element={<Form />} />
+    <Route path="/" element={<Login />} />
+    <Route path="/transactionform" element={<Form />} />
     <Route path="showtransactions" element={<TransactionHistory></TransactionHistory>}/> 
     <Route path="logout" element={<Logout />} />
 

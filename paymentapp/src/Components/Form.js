@@ -50,7 +50,7 @@ const Form = (props) =>{
     console.log(e.target.value.length)
     setStatus(e.target.value.length)
     if (e.target.value.length===14){
-      
+
      
       axios.get(`http://localhost:8080/customers/${e.target.value}`)
       .then((response) => {console.log(response.status)
@@ -202,12 +202,12 @@ const Form = (props) =>{
         if (submit==="false")
     
         return <div className="row" style={{marginLeft:50, marginRight:50}} >
-                   <div style={{borderWidth:2,borderColor:"#206466",borderStyle:"solid",padding:50}}>
+                   <div style={{borderWidth:2,borderColor:"#02E6E6",borderStyle:"solid",padding:50}}>
                          
                     <div className="col-6" >
                     <form className="row g-3">
                                  <div className="mb-3">
-                                             <label for="customerID" className="form-label">Date</label>
+                                             <label for="Date" className="form-label">Date</label>
                                              <input type="date" required className="form-control" onChange={e=>setTransaction({...transaction,trans_date:e.target.value})} />
                                              <label style={{color:'red'}}>{dateError}</label>
                                  </div>

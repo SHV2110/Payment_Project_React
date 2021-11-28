@@ -72,7 +72,7 @@ const Transaction=(props)=>{
     if (props.terror===true  && balance<0){
       return <div><h3 style={{color:'red',textAlign:'center'}}>Transaction failed due to insufficient funds</h3></div>
     }
-    return <div>Hello</div>
+    return <div></div>
       }
 
 export default Transaction;
