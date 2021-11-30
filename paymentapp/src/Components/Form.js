@@ -102,6 +102,7 @@ const Form = (props) =>{
        console.log(response.data)
        setNstatus(1)
        setValue(response.data)
+       console.log(value)
     })
      .catch(error=>{
        console.log(error)})
@@ -119,8 +120,8 @@ const Form = (props) =>{
       console.log("request sending")
       axios.post("http://localhost:8080/transactions/",transaction).
       then(response=>{console.log(response.data)
-      setTerror(false)}).catch(error=>{console.log(error)
-      setTerror(true)})
+      setTerror("false")}).catch(error=>{console.log(error)
+      setTerror("true")})
     }
     ,[request])
 
@@ -209,8 +210,13 @@ const Form = (props) =>{
       valid=false;
     }
     // bank2bank
-  if(customer.accountholdername.startsWith("HDFC"))
+    
+  if(customer.name.startsWith("HDFC"))
   {
+    if(!(customer.customerid==="27216037942722" ||customer.customerid==="42895235807723" || customer.customerid==="69652133523248"||customer.customerid==="45002608912874"))
+    {  setAccerror("enter HDFC a/c number")
+    valid=false;
+  }
     if (bank.bankname!="HDFC BANK LIMITED") 
     {
         setBiderror("enter HDFC bank ID")
@@ -221,12 +227,16 @@ const Form = (props) =>{
     setNameerror("enter HDFC a/c name")
     valid=false;
     }
+    if(!(transaction.reciever_accnum==="27216037942722" ||transaction.reciever_accnum==="42895235807723" || transaction.reciever_accnum==="69652133523248"||transaction.reciever_accnum==="45002608912874"))
+    {  setAccerror("enter HDFC a/c number")
+    valid=false;
+  }
     
   
   console.log(transaction.transfertypes)
-  if(transaction.transfertypes!="banktransfer"){
-  setTransterror("select bank transfer")
-  valid =false;
+        if(transaction.transfertypes!="banktransfer"){
+        setTransterror("select bank transfer")
+        valid =false;
   }
 }
 if(customer.customerid===transaction.receiveraccountholdernumber){
