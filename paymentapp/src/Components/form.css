@@ -1,3 +1,29 @@
-formborder{
-    border: 5 solid #206466;
+
+.error{
+    color:'blue'
 }
+.bg-teal {
+    background-color: teal;
+  }
+  .btn-teal { 
+    color: #08ced4; 
+    background-color: #2290A1; 
+    border-color: #1C9AA6; 
+  } 
+   
+  .btn-teal:hover, 
+  .btn-teal:focus, 
+  .btn-teal:active, 
+  .btn-teal.active, 
+  .open .dropdown-toggle.btn-teal { 
+    color: #FFFFFF; 
+    background-color: #0FC7D1; 
+    border-color: #1C9AA6; 
+  } 
+   
+  .btn-teal:active, 
+  .btn-teal.active, 
+  .open .dropdown-toggle.btn-teal { 
+    background-image: none; 
+  } 
+   

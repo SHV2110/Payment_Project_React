@@ -9,17 +9,26 @@ import {Routes,Route,Link} from 'react-router-dom'
 import Logout from './Components/Logout'
 import './index.css'
 import Login from './Components/Login.js'
-
+import FormCss from './Components/Form.css'
+import Insufficientfunds  from './Components/Insufficientfunds'
+import Transaction from './Components/Transaction';
 function App() {
-
+  const [loginf,setLoginf]=useState(false)
+  const loginstatus=(loginflag)=>{
+    setLoginf(loginflag)
+  }
+ 
   return (<div className="container">
-  <Navbar  />
+  <Navbar  loginf={loginf}/>
   <br/>
 <Routes>
-    <Route path="/" element={<Login />} />
-    <Route path="/transactionform" element={<Form />} />
-    <Route path="showtransactions" element={<TransactionHistory></TransactionHistory>}/> 
-    <Route path="logout" element={<Logout />} />
+    <Route path="/" element={<Login loginstatus={loginstatus} />}/>
+    // <Route path="/login" element={<Login />} />
+    <Route path="/transactionform" element={<Form loginstatus={loginstatus} />} />
+    <Route path="showtransactions" element={<TransactionHistory loginstatus={loginstatus} ></TransactionHistory>}/> 
+    <Route path="/logout" element={<Logout loginstatus={loginstatus}/>}/>
+    <Route path="/transactionerror" element={<Insufficientfunds/>}/>
+    
 
 
     </Routes>

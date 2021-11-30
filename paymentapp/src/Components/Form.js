@@ -5,9 +5,10 @@ import GetBank from './GetBank'
 import GetCustomer from './GetCustomer'
 import Transaction from './Transaction'
 import NameCheck from './NameCheck'
-
+import Insufficientfunds from './Insufficientfunds'
 const Form = (props) =>{
-    console.log('Form component called')
+    props.loginstatus(true)
+    console.log('TranscationForm component called')
     const [customer,setCustomer]=useState({customerID: '', name: '', clearBalance: 0, overdraft: ''})
     const [status,setStatus]=useState(0)
     const [bank,setBank]=useState({bic: '', bankName: ''})// useState("")
@@ -15,10 +16,10 @@ const Form = (props) =>{
     const [nstatus,setNstatus]=useState(0)
     const[request,setRequest]=useState("false")
     const [cerror,setCerror]=useState(false)
-    const [berror,setBerror]=useState(false)
-    const [terror,setTerror]=useState(false)
+    const [berror,setBerror]=useState(true)
+    const [terror,setTerror]=useState("form")
     const [value,setValue]=useState(false)
-    const [submit,setSubmit]=useState("false")
+    const [submit,setSubmit]=useState(false)
     const [dateError,setDateError]=useState(null)
     const [ciderror,setCiderror]=useState(null)
     const [biderror,setBiderror]=useState(null)
@@ -27,6 +28,10 @@ const Form = (props) =>{
     const [msgcerror,setMsgcerror]=useState(null)
     const [transterror,setTransterror]=useState(null)
     const [amterror,setAmterror]=useState(null)
+    const [insufferror,setInsufferror]=useState(false)
+    // const [btoberror,setBtoberror]=useState(null)
+
+
     const [transaction,setTransaction]=useState({
       amount:0,
       receiveraccountholdername:"",
@@ -73,7 +78,7 @@ const Form = (props) =>{
       console.log(e.target.value.length)
       setacntnostatus(e.target.value.length)
 
-      if (e.target.value.length===11){
+      if (e.target.value.length==11||e.target.value.length==10 ){
         axios.get(`http://localhost:8080/bank/${e.target.value}`)
         .then((response) => {
         console.log(response.status)
@@ -120,13 +125,18 @@ const Form = (props) =>{
     ,[request])
 
     const addTransaction=(e)=>{
-      e.preventDefault()
+      
      
      const valid= validateForm()
      if (!valid) return false;
-      setRequest("true")
-      if(valid===true)
-      setSubmit("true")
+  setRequest("true")
+ 
+  if(valid===true && terror==="true")
+  setSubmit("terror")
+  if(valid===true && terror==="false")
+  setSubmit("true")
+  console.log(submit)
+  console.log(insufferror)
     }
     const submitHandler=(submit,status,acntnostatus,nstatus)=>
     {
@@ -134,6 +144,9 @@ const Form = (props) =>{
       setStatus(status)
       setacntnostatus(acntnostatus)
       setNstatus(nstatus)
+      setInsufferror(false)
+      window.location.reload()
+
     }
     const validateForm=()=>{
       let valid=true;
@@ -156,8 +169,8 @@ const Form = (props) =>{
       setBiderror("Bank BIC is required")
       valid=false;
     }
-    if(bank.bic<11){
-      setBiderror("enter valid bic with 11 characters")
+    if(bank.bic<10){
+      setBiderror("enter a valid bic ")
       valid=false;
     }
     if(transaction.receiveraccountholdername===''){
@@ -195,14 +208,48 @@ const Form = (props) =>{
       setAmterror("please enter the amount")
       valid=false;
     }
-    
-     return valid;  
-    
+    // bank2bank
+  if(customer.accountholdername.startsWith("HDFC"))
+  {
+    if (bank.bankname!="HDFC BANK LIMITED") 
+    {
+        setBiderror("enter HDFC bank ID")
+        valid=false;
     }
-        if (submit==="false")
+    if (!transaction.receiveraccountholdername.startsWith("HDFC") || (customer.accountholdername).toUpperCase()===(transaction.receiveraccountholdername).toUpperCase())
+    {
+    setNameerror("enter HDFC a/c name")
+    valid=false;
+    }
     
-        return <div className="row" style={{marginLeft:50, marginRight:50}} >
-                   <div style={{borderWidth:2,borderColor:"#02E6E6",borderStyle:"solid",padding:50}}>
+  
+  console.log(transaction.transfertypes)
+  if(transaction.transfertypes!="banktransfer"){
+  setTransterror("select bank transfer")
+  valid =false;
+  }
+}
+if(customer.customerid===transaction.receiveraccountholdernumber){
+  setAccerror("customer ID and reciever ID cannot be Same!")
+  valid=false;
+}
+if((transaction.receiveraccountholdernumber==="27216037942722" ||transaction.receiveraccountholdernumber==="42895235807723" || transaction.receiveraccountholdernumber==="69652133523248"||transaction.receiveraccountholdernumber==="45002608912874")
+&& (!(customer.accountholdername).startsWith("HDFC")))
+    {  setCiderror("enter valid hdfc a/c number to initiate bank transfer")
+    console.log(ciderror)
+    valid=false;
+}
+if(customer.clearbalance<transaction.amount&&customer.overdraftflag.toUpperCase()==="NO" && !transaction.transfertypes==="Bank Transfer"){
+      setInsufferror(true)
+      setSubmit(false)
+      }
+ return valid;  
+}
+
+        
+    
+        const transform = <div className="row" style={{marginLeft:50, marginRight:50}} >
+                   <div style={{borderWidth:2,borderColor:"teal",borderStyle:"solid",padding:50}}>
                          
                     <div className="col-6" >
                     <form className="row g-3">
@@ -217,6 +264,7 @@ const Form = (props) =>{
                                              <input type="text" required className="form-control" id="customerID" placeholder="enter customer ID" onChange={customerIDHandler}/>
                                              <label style={{color:'red'}}>{ciderror}</label>
                                               <div><GetCustomer cerror={cerror} status={status} customer={customer}/></div>
+                                              
                                  </div>
                                 
                    
@@ -279,6 +327,7 @@ const Form = (props) =>{
                                 <label for="BIC" className="form-label">Amount</label>
                                <input type="number" className="form-control" id="num" placeholder="enter Amount" onChange={e=>setTransaction({...transaction,amount:e.target.value,transferfees:0.0025*e.target.value})}/>
                                <label style={{color:'red'}}>{amterror}</label>
+                               <label style={{color:'red'}}>{insufferror}</label>
     
           </div>
           <div className="mb-3">
@@ -290,7 +339,15 @@ const Form = (props) =>{
           </div>
           </div>
           </div>
-           if(submit==="true") return <div><Transaction terror={terror} submitHandler={submitHandler}  transaction={transaction}/></div>
+
+           const invoice= <div><Transaction submitHandler={submitHandler} transaction={transaction}/></div>
+           const insufficient=<div><Insufficientfunds submitHandler={submitHandler} /></div>
+           if (!submit && !insufferror)
+           return <div>{transform}</div>
+           if(submit && !insufferror)
+           return <div>{invoice}</div>
+           if(insufferror)
+           return <div>{insufficient}</div>
          
      
      
